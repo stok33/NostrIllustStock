@@ -4,7 +4,7 @@ const relayUrl = "wss://relay-jp.nostr.wirednet.jp";
 /* 入力された公開鍵を取得byAIchan*/
 const searchPosts = async () => {
   const npubInput = document.getElementById("npubInput");
-  const npub = npubInput.value;
+  let npub = npubInput.value;
 
 /*取得したnpubをhexに変換*/
   const { type, data } = NostrTools.nip19.decode(npub);
