@@ -7,8 +7,7 @@ const searchPosts = async () => {
   const npub = npubInput.value;
 
 /*取得したnpubをhexに変換*/
-  const { type, data } = NostrTools.nip19.decode();
-  const out = (() => {
+  const { type, data } = NostrTools.nip19.decode(npub);
 	switch (type) {
   		case "npub":
     		  npub = data;
@@ -25,7 +24,7 @@ const searchPosts = async () => {
   		default:
    		  console.error("エラー: これは公開鍵じゃないよ");
 	}
-})();
+)();
 
 
   /* Q-1: nostr-toolsのRelayオブジェクトを初期化してみよう */
