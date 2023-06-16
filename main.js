@@ -1,5 +1,5 @@
 import { currUnixtime, getCliArg, } from "./utils.js";
-import { relayInit, nip19 } from "nostr-tools";
+import { relayInit, nip19 } from "./nostr-tools";
 import "websocket-polyfill";
 
 if (process.argv.length <= 2) {
