@@ -23,7 +23,7 @@ const out = (() => {
 
 const relayUrl = "wss://relay-jp.nostr.wirednet.jp";
 /* 入力された公開鍵を取得byAIchan*/
-const searchPosts = async () => {
+function searchPosts() {
   const npubInput = document.getElementById("npubInput");
   const npub = npubInput.value;
 
