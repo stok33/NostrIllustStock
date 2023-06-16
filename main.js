@@ -1,6 +1,6 @@
 const currUnixtime = () => Math.floor(new Date().getTime() / 1000);
 
-const { type, data } = nip19.decode();
+const { type, data } = NostrTools.nip19.decode();
 const out = (() => {
 	switch (type) {
   		case "npub":
