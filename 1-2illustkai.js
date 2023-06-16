@@ -66,7 +66,7 @@ const main = async (npub) => {
 			// 作者の公開鍵
 	
 		}
-  ]);
+  );
 
   const illustContainer = document.getElementById("illustContainer");
   illustContainer.innerHTML = ""; // コンテナをクリア
