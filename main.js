@@ -1,7 +1,14 @@
 const currUnixtime = () => Math.floor(new Date().getTime() / 1000);
 
-const { type, data } = NostrTools.nip19.decode();
-const out = (() => {
+const relayUrl = "wss://relay-jp.nostr.wirednet.jp";
+/* 入力された公開鍵を取得byAIchan*/
+const searchPosts = async () => {
+  const npubInput = document.getElementById("npubInput");
+  const npub = npubInput.value;
+
+/*取得したnpubをhexに変換*/
+  const { type, data } = NostrTools.nip19.decode();
+  const out = (() => {
 	switch (type) {
   		case "npub":
     		  npub = data;
@@ -20,12 +27,6 @@ const out = (() => {
 	}
 })();
 
-
-const relayUrl = "wss://relay-jp.nostr.wirednet.jp";
-/* 入力された公開鍵を取得byAIchan*/
-const searchPosts = async () => {
-  const npubInput = document.getElementById("npubInput");
-  const npub = npubInput.value;
 
   /* Q-1: nostr-toolsのRelayオブジェクトを初期化してみよう */
   const relay = relayInit(relayUrl);
@@ -67,4 +68,3 @@ const searchPosts = async () => {
     console.log("****** EOSE ******");
   });
 };
-main(npub).catch((e) => console.error(e));
