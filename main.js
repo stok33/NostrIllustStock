@@ -53,10 +53,14 @@ const searchPosts = async () => {
 
   // メッセージタイプごとにリスナーを設定できる
   sub.on("event", (ev) => {
-    const content = ev[2].content; // contentタグの内容を取得
-    const postDiv = document.createElement("div");
-    postDiv.textContent = content;
-    illustContainer.appendChild(postDiv); //<div>部分に内容が飛んでく
+    try {
+     const content = ev[2].content; // contentタグの内容を取得
+     const postDiv = document.createElement("div");
+     postDiv.textContent = content;
+     illustContainer.appendChild(postDiv); //<div>部分に内容が飛んでく
+    } catch (err) {
+      console.error(err);
+    }
   });
 
   sub.on("eose", () => {
