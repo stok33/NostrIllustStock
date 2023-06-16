@@ -1,33 +1,22 @@
 const currUnixtime = () => Math.floor(new Date().getTime() / 1000);
 
-if (process.argv.length <= 2) {
-  console.error(
-    "usage: node index.js <bech32 ID (npub, nprofile, nsec, note, nevent)>"
-  );
-  process.exit(1);
-}
-
 const { type, data } = nip19.decode(process.argv[2]);
 const out = (() => {
 	switch (type) {
   		case "npub":
-    		npub = data;
+    		  npub = data;
     		break;
   		case "nprofile":
-    		npub = data.pubkey;
+    		  npub = data.pubkey;
     		break;
   		case "nsec":
-   		 console.error("エラー: これは秘密鍵です！秘密にして！");
-   		 process.exit(1);
+   		  console.error("エラー: これは秘密鍵です！秘密にして！");
   		case "note":
-    		console.error("エラー: これはnoteIDです。公開鍵じゃないよ");
-    		process.exit(1);
+    		  console.error("エラー: これはnoteIDです。公開鍵じゃないよ");
   		case "nevent":
-    		console.error("エラー: これはイベントIDです。公開鍵じゃないよ");
-    		process.exit(1);
+    		  console.error("エラー: これはイベントIDです。公開鍵じゃないよ");
   		default:
-   		 console.error("エラー: これは公開鍵じゃないよ");
-   		 process.exit(1);
+   		  console.error("エラー: これは公開鍵じゃないよ");
 	}
 })();
 
