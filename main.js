@@ -1,6 +1,4 @@
-import { currUnixtime, getCliArg, } from "./utils.js";
-import { relayInit, nip19 } from "./nostr-tools";
-import "./websocket-polyfill";
+const currUnixtime = () => Math.floor(new Date().getTime() / 1000);
 
 if (process.argv.length <= 2) {
   console.error(
