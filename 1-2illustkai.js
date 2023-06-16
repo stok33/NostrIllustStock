@@ -66,10 +66,10 @@ const searchPosts = async () => {
 
   // メッセージタイプごとにリスナーを設定できる
   sub.on("event", (ev) => {
-    // イベントがhtmlの<div>んとこに飛んでく、多分
+    const content = ev[2].content; // contentタグの内容を取得
     const postDiv = document.createElement("div");
-    postDiv.textContent = ev.content;
-    illustContainer.appendChild(postDiv);
+    postDiv.textContent = content;
+    illustContainer.appendChild(postDiv); //<div>部分に内容が飛んでく
   });
 
   sub.on("eose", () => {
