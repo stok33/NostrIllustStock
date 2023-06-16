@@ -38,15 +38,14 @@ const out = (() => {
 const relayUrl = "wss://relay-jp.nostr.wirednet.jp";
 /* 入力された公開鍵を取得byAIchan*/
 const searchPosts = async () => {
- const npubInput = document.getElementById("npubInput");
- const npub = npubInput.value;
+  const npubInput = document.getElementById("npubInput");
+  const npub = npubInput.value;
 
- const relay = relayInit(relayUrl);
- relay.on("error", () => {
-  console.error("failed to connect");
- });
+  const relay = relayInit(relayUrl);
+  relay.on("error", () => {
+    console.error("failed to connect");
+   });
 
-const main = async (npub) => {
   /* Q-1: nostr-toolsのRelayオブジェクトを初期化してみよう */
   const relay = relayInit(relayUrl);
   relay.on("error", () => {
