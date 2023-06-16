@@ -24,7 +24,6 @@ const searchPosts = async () => {
   		default:
    		  console.error("エラー: これは公開鍵じゃないよ");
 	}
-)();
 
 
   /* Q-1: nostr-toolsのRelayオブジェクトを初期化してみよう */
