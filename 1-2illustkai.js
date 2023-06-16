@@ -41,11 +41,6 @@ const searchPosts = async () => {
   const npubInput = document.getElementById("npubInput");
   const npub = npubInput.value;
 
-  const relay = relayInit(relayUrl);
-  relay.on("error", () => {
-    console.error("failed to connect");
-   });
-
   /* Q-1: nostr-toolsのRelayオブジェクトを初期化してみよう */
   const relay = relayInit(relayUrl);
   relay.on("error", () => {
