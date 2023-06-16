@@ -1,7 +1,6 @@
-const { currUnixtime, getCliArg, createElement, getElementById, appendchild } = require("./utils.js");
-const { relayInit } = require("nostr-tools");
-require("websocket-polyfill");
-const { nip19 } = require("nostr-tools");
+import { currUnixtime, getCliArg, createElement, getElementById, appendchild } from "./utils.js";
+import { relayInit, nip19 } from "nostr-tools";
+import "websocket-polyfill";
 
 if (process.argv.length <= 2) {
   console.error(
