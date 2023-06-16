@@ -57,7 +57,7 @@ const main = async (npub) => {
   await relay.connect(relayUrl);
 
   /* Q-3: Relayオブジェクトのメソッドを使って、イベントを購読してみよう */
-  const sub = relay.sub(
+  const sub = relay.sub([
   		{
 			"kinds": [1],
 			"limit": 100,
@@ -66,7 +66,7 @@ const main = async (npub) => {
 			// 作者の公開鍵
 	
 		}
-  );
+  ]);
 
   const illustContainer = document.getElementById("illustContainer");
   illustContainer.innerHTML = ""; // コンテナをクリア
