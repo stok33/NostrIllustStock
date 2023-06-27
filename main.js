@@ -67,7 +67,9 @@ const searchPosts = async () => {
     console.log(pf);
 
     try {
-      const profcontent = JSON.parse(pf.content); // JSON文字列をオブジェクトに変換
+      const profcontent = JSON.parse(pf.content); // eventJSON文字列をオブジェクトに変換
+      const profpicture = profcontent.picture;//content内のpictureの値を取得
+      const profdisplayname = profcontent.display_name; // content内のdisplay_nameの値を取得
       const profname = profcontent.name; // content内のnameの値を取得
       const profabout = profcontent.about; // content内のaboutの値を取得
       console.log(profname);
@@ -75,16 +77,27 @@ const searchPosts = async () => {
       // プロフィールを表示するための要素を作成
       const kind0Container = document.createElement("div");
       
-      // プロフィールを表示するための部分にnameとaboutの要素を追加
+      // プロフィールを表示するための部分にアイコンとdisplay_nameとnameと自己紹介を追加
+      //アイコン
+      const imageElement = document.createElement("img");
+      imageElement.src = profpicture;
+      imageElement.style.maxWidth = "100px"; // 最大幅制限
+      imageElement.style.height = "auto"; // 高さは自動調整
+      kind0Container.appendChild(imageElement);  // プロフィールを表示する要素に追加
+      //display_name　表示名
+      const displaynameElement = document.createElement("div");
+      displaynameElement.textContent = profdisplayname;
+      kind0Container.appendChild(displaynameElement); // プロフィールを表示する要素に追加
+      //name　アットマークの後
       const nameElement = document.createElement("div");
       nameElement.textContent = profname;
-      kind0Container.appendChild(nameElement);
-
+      kind0Container.appendChild(nameElement); // プロフィールを表示する要素に追加
+      //自己紹介欄
       const aboutElement = document.createElement("div");
       aboutElement.textContent = profabout;
-      kind0Container.appendChild(aboutElement);
+      kind0Container.appendChild(aboutElement); // プロフィールを表示する要素に追加
 
-      // プロフィールコンテナに追加
+      // 全部まとめてプロフィールコンテナに追加
       profContainer.appendChild(kind0Container);
     } catch (err) {
       console.error(err);
