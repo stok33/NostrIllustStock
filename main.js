@@ -49,18 +49,54 @@ const searchPosts = async () => {
   illustContainer.innerHTML = ""; // コンテナをクリア
 
   // メッセージタイプごとにリスナーを設定できる
-  sub.on("event", (ev) => {
+　sub.on("event", (ev) => {
     console.log(ev);
-      
+
     try {
-     const content = ev.content; // contentタグの内容を取得
-     const postDiv = document.createElement("div");
-     postDiv.textContent = content;
-     illustContainer.appendChild(postDiv); //<div>部分に内容が飛んでく
+      const content = ev.content; // contentタグの内容を取得
+
+      // contentタグ内に直リンクの画像URLがあるかチェック
+      const imgRegex = /https?:\/\/[^\s]+/g;
+      const imgMatches = [...content.matchAll(imgRegex)];
+      console.log(imgMatches);
+      // 投稿を表示するための要素を作成
+      const postContainer = document.createElement("div");
+
+      if (imgMatches.length > 0) {
+        // 画像がある場合の処理
+        const imageContainer = document.createElement("div");
+
+        for (const match of imgMatches) {
+          const imageUrl = match[0];
+
+          // 画像を表示するための要素を作成
+          const imageElement = document.createElement("img");
+          imageElement.src = imageUrl;
+          //画像の調整
+          imageElement.style.maxWidth = "60%";
+          imageElement.style.height = "auto";
+
+          imageContainer.appendChild(imageElement);
+        }
+
+        postContainer.appendChild(imageContainer);
+      }
+
+      // テキストコンテンツを表示するための要素を作成
+      const textContainer = document.createElement("div");
+      // 不要なURLを削除してテキストを設定
+      textContainer.textContent = content.replace(imgRegex, "");
+
+      postContainer.appendChild(textContainer);
+
+      illustContainer.appendChild(postContainer);
+      //境界線追加
+      illustContainer.appendChild(document.createElement("hr"));
     } catch (err) {
       console.error(err);
     }
   });
+
 
   sub.on("eose", () => {
     console.log("****** EOSE ******");
