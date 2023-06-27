@@ -87,7 +87,7 @@ const searchPosts = async () => {
       // 不要なURLを削除してテキストを設定
       textContainer.textContent = content.replace(imgRegex, "");
       //テキスト部分を投稿表示のための要素postContainerに追加(ただし、画像URLがない投稿は除く。画像とテキストが両方あるときのみテキストを表示する)
-      if (text && imgMatches.length > 0) {
+      if (textContainer && imgMatches.length > 0) {
         postContainer.appendChild(textContainer);
       }
 
