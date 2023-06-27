@@ -16,10 +16,8 @@ const searchPosts = async () => {
     		  npub = data.pubkey;
     		break;
   		case "nsec":
-   		  alart("わわ！これは秘密鍵じゃぞ！秘密にしておくのじゃ〜！");
 		  console.error("エラー: これは秘密鍵…　公開鍵はnpubで始まる方");
   		default:
-   		  alart("公開鍵ではないのう　…何じゃ？");
 		  console.error("エラー：これは…公開鍵じゃないね　");
 	}
 
