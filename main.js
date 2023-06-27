@@ -75,10 +75,10 @@ const searchPosts = async () => {
           //画像の調整
           imageElement.style.maxWidth = "60%";
           imageElement.style.height = "auto";
-
+          //画像をimageContainerに追加
           imageContainer.appendChild(imageElement);
         }
-
+        //画像部分をimageContainerを投稿表示のためのpostContainerに追加
         postContainer.appendChild(imageContainer);
       }
 
@@ -86,9 +86,12 @@ const searchPosts = async () => {
       const textContainer = document.createElement("div");
       // 不要なURLを削除してテキストを設定
       textContainer.textContent = content.replace(imgRegex, "");
+      //テキスト部分を投稿表示のための要素postContainerに追加(ただし、画像URLがない投稿は除く。画像とテキストが両方あるときのみテキストを表示する)
+      if (text && imgMatches.length > 0) {
+        postContainer.appendChild(textContainer);
+      }
 
-      postContainer.appendChild(textContainer);
-
+      //画像とテキストが入ったpostContainerを一つの投稿表示欄illustContainerに追加
       illustContainer.appendChild(postContainer);
       //境界線追加
       illustContainer.appendChild(document.createElement("hr"));
