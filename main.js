@@ -27,7 +27,7 @@ const searchPosts = async () => {
 
 
   /* Q-1: nostr-toolsのRelayオブジェクトを初期化してみよう */
-  const relay = relayInit(relayUrl);
+  const relay = NostrTools.relayInit(relayUrl);
   relay.on("error", () => {
     console.error("failed to connect");
   });
@@ -52,8 +52,10 @@ const searchPosts = async () => {
 
   // メッセージタイプごとにリスナーを設定できる
   sub.on("event", (ev) => {
+    console.log(ev);
+      
     try {
-     const content = ev[2].content; // contentタグの内容を取得
+     const content = ev.content; // contentタグの内容を取得
      const postDiv = document.createElement("div");
      postDiv.textContent = content;
      illustContainer.appendChild(postDiv); //<div>部分に内容が飛んでく
