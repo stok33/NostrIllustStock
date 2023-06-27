@@ -17,8 +17,10 @@ const searchPosts = async () => {
     		break;
   		case "nsec":
 		  console.error("エラー: これは秘密鍵…　公開鍵はnpubで始まる方");
+          alert("わわ！これは秘密鍵じゃ！秘密にするのじゃ〜！！");
   		default:
 		  console.error("エラー：これは…公開鍵じゃないね　");
+          alert("公開鍵じゃないな　……何じゃ？");
 	}
 
 
