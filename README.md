@@ -1,5 +1,7 @@
 # Nostr井ラスト倉庫(Nostr Illust Stock)
 
+https://stok33.github.io/NostrIllustStock/%E5%80%89%E5%BA%AB.png
+
 ## 何
 
 Nostrの公開鍵を入力すると、そのアカウントが投稿したイラストタグ(#illust)付きの投稿を見ることができます。
