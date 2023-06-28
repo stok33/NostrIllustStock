@@ -1,3 +1,4 @@
+
 # Nostr井ラスト倉庫(Nostr Illust Stock)
 
 
@@ -18,3 +19,9 @@ Nostrの公開鍵を入力すると、そのアカウントが投稿したイラ
 ## イラストタグ付けるの忘れちゃった
 
 「#illust」つけてもう一回投稿しましょう。あなたの素敵なイラストが複数回流れてきて悪く思う人はいないと思います。
+
+## もとになったもの
+
+[learn-nostr-by-crafting](https://github.com/nostr-jp/learn-nostr-by-crafting)
+
+このコード(main.js)は演習1-2を魔改造して作られました。たのしい演習ありがとうございます。
