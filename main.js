@@ -118,7 +118,7 @@ const searchPosts = async () => {
       const content = ev.content; // contentタグの内容を取得
 
       // contentタグ内に直リンクの画像URLがあるかチェック
-      const imgRegex = /https?:\/\/[^\s]+/g;
+      const imgRegex = /https?:\/\/[^\s]+\.(?:png|jpe?g|gif)/g;
       const imgMatches = [...content.matchAll(imgRegex)];
       console.log(imgMatches);
       // 投稿を表示するための要素を作成
