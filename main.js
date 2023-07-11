@@ -116,11 +116,15 @@ const searchPosts = async () => {
 
     try {
       const content = ev.content; // contentタグの内容を取得
+      const Id = ev.id // idタグの内容（ここではnoteid）を取得
 
       // contentタグ内に直リンクの画像URLがあるかチェック
       const imgRegex = /https?:\/\/[^\s]+\.(?:png|jpe?g|gif|webp)/g;
       const imgMatches = [...content.matchAll(imgRegex)];
       console.log(imgMatches);
+
+      const noteId = NostrTools.nip19.noteEncode(Id); //noteidをNIP-19ぱわーでnote~形式に直す
+
       // 投稿を表示するための要素を作成
       const postContainer = document.createElement("div");
 
@@ -140,7 +144,7 @@ const searchPosts = async () => {
           //画像をimageContainerに追加
           imageContainer.appendChild(imageElement);
         }
-        //画像部分をimageContainerを投稿表示のためのpostContainerに追加
+        //画像部分imageContainerを投稿表示のためのpostContainerに追加
         postContainer.appendChild(imageContainer);
       }
 
@@ -152,8 +156,14 @@ const searchPosts = async () => {
       if (textContainer && imgMatches.length > 0) {
         postContainer.appendChild(textContainer);
       }
+      
+      //noteid
+      const idElement = document.createElement("div");
+      idElement.textContent = noteId;
+      postContainer.appendChild(idElement);
+      
 
-      //画像とテキストが入ったpostContainerを一つの投稿表示欄illustContainerに追加
+      //画像とテキストとnoteidが入ったpostContainerを一つの投稿表示欄illustContainerに追加
       illustContainer.appendChild(postContainer);
       //境界線追加
       illustContainer.appendChild(document.createElement("hr"));
