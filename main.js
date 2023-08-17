@@ -117,11 +117,15 @@ const searchPosts = async () => {
     try {
       const content = ev.content; // contentタグの内容を取得
       const Id = ev.id // idタグの内容（ここではnoteid）を取得
+      const tags = ev.tags; // tags配列を取得
 
       // contentタグ内に直リンクの画像URLがあるかチェック
       const imgRegex = /https?:\/\/[^\s]+\.(?:png|jpe?g|gif|webp)/g;
       const imgMatches = [...content.matchAll(imgRegex)];
       console.log(imgMatches);
+        
+      // センシティブなコンテンツのチェック
+      const isSensitive = tags.some(tag => tag[0] === 'content-warning');
 
       const noteId = NostrTools.nip19.noteEncode(Id); //noteidをNIP-19ぱわーでnote~形式に直す
 
@@ -142,28 +146,111 @@ const searchPosts = async () => {
           imageElement.style.maxWidth = "60%";
           imageElement.style.height = "auto";
           //画像をimageContainerに追加
-          imageContainer.appendChild(imageElement);
+         // imageContainer.appendChild(imageElement);
         }
-        //画像部分imageContainerを投稿表示のためのpostContainerに追加
-        postContainer.appendChild(imageContainer);
-      }
 
-      // テキストコンテンツを表示するための要素を作成
-      const textContainer = document.createElement("div");
-      // 不要なURLを削除してテキストを設定
-      textContainer.textContent = content.replace(imgRegex, "");
-      //テキスト部分を投稿表示のための要素postContainerに追加(ただし、画像URLがない投稿は除く。画像とテキストが両方あるときのみテキストを表示する)
-      if (textContainer && imgMatches.length > 0) {
-        postContainer.appendChild(textContainer);
       }
       
-      //noteid
-      const idElement = document.createElement("div");
-      idElement.textContent = noteId;
-      postContainer.appendChild(idElement);
+      switch (true) {
+          // センシティブなコンテンツの場合の処理
+        case isSensitive && imgMatches.length > 0:
+              let sensitiveContentClicked = false; // 初期値はクリックされていない状態
+              const sensitiveContent = document.createElement("div");
+              const sensitiveText = document.createElement("div");
+              sensitiveText.textContent = "センシティブなコンテンツ、閲覧するにはクリック";
+              sensitiveText.style.color = "red"; // テキストの色を赤に設定
+              sensitiveText.style.cursor = "pointer"; // カーソルをポインターに変更
+              sensitiveContent.appendChild(sensitiveText);
+
+              // 理由表示
+              const reasonTag = tags.find(tag => tag[0] === 'content-warning');
+              if (reasonTag && reasonTag[1]) {
+                  const reasonElement = document.createElement("div");
+                  reasonElement.textContent = `理由: ${reasonTag[1]}`;
+                  sensitiveText.style.color = "red"; // テキストの色を赤に設定
+                  sensitiveContent.appendChild(reasonElement);
+              }
+              
+              
+              // クリックイベントを設定
+              sensitiveContent.addEventListener("click", () => {
+                  if (!sensitiveContentClicked) { // クリックは一回まで！クリックしてない場合のみ処理が行われる
+                      sensitiveContentClicked = true; // クリック状態をtrueに設定
+                      // クリック時の処理：画像を表示する
+                      sensitiveContent.innerHTML = ''; // テキストをクリア
+                      // 画像を表示するための要素を作成
+                      for (const match of imgMatches) {
+                          const SensitiveimageUrl = match[0];
+                          
+                          // 画像を表示するための要素を作成
+                          const Sensitiveimage = document.createElement("img");
+                          Sensitiveimage.src = SensitiveimageUrl;
+                          //画像の調整
+                          Sensitiveimage.style.maxWidth = "60%";
+                          Sensitiveimage.style.height = "auto";
+                          //画像をpostContainerに追加
+                          postContainer.appendChild(Sensitiveimage);
+                      }
+                      
+                      // テキストコンテンツを表示するための要素を作成
+                      const Sensitivetext = document.createElement("div");
+                      // 不要なURLを削除してテキストを設定
+                      Sensitivetext.textContent = content.replace(imgRegex, "");
+                      // テキスト部分を投稿表示のための要素 postContainer に追加
+                      sensitiveContent.appendChild(Sensitivetext);
+                      
+                      // noteidの表示
+                      const idElement = document.createElement("div");
+                      idElement.textContent = noteId;
+                      postContainer.appendChild(idElement);
+                  }
+
+              });
+              // 投稿コンテナにセンシティブ投稿を追加
+              postContainer.appendChild(sensitiveContent);
+              
+              break;
+              
+        // センシティブでないコンテンツで画像付きの場合
+        case !isSensitive && imgMatches.length > 0:
+
+              // 画像を表示するための要素を作成
+              for (const match of imgMatches) {
+                const imageUrl = match[0];
+
+                // 画像を表示するための要素を作成
+                const imageElement = document.createElement("img");
+                imageElement.src = imageUrl;
+                //画像の調整
+                imageElement.style.maxWidth = "60%";
+                imageElement.style.height = "auto";
+                //画像をpostContainerに追加
+                postContainer.appendChild(imageElement);
+              }
+
+        
+              // テキストコンテンツを表示するための要素を作成
+              const textContainer = document.createElement("div");
+              // 不要なURLを削除してテキストを設定
+              textContainer.textContent = content.replace(imgRegex, "");
+              //テキスト部分を投稿表示のための要素postContainerに追加
+              postContainer.appendChild(textContainer);
+      
+              //noteidの表示
+              const idElement = document.createElement("div");
+              idElement.textContent = noteId;
+              postContainer.appendChild(idElement);
+              break;
+              
+        //画像なしの場合、なにもしない
+        default:
+              
+    };
+
+
       
 
-      //画像とテキストとnoteidが入ったpostContainerを一つの投稿表示欄illustContainerに追加
+      //postContainerを一つの投稿表示欄illustContainerに追加
       illustContainer.appendChild(postContainer);
       //境界線追加
       illustContainer.appendChild(document.createElement("hr"));
