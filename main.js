@@ -150,7 +150,7 @@ const searchPosts = async () => {
               if (reasonTag && reasonTag[1]) {
                   const reasonElement = document.createElement("div");
                   reasonElement.textContent = `理由: ${reasonTag[1]}`;
-                  sensitiveText.style.color = "red"; // テキストの色を赤に設定
+                  reasonElement.style.color = "red"; // テキストの色を赤に設定
                   sensitiveContent.appendChild(reasonElement);
               }
               
