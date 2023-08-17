@@ -140,7 +140,7 @@ const searchPosts = async () => {
               let sensitiveContentClicked = false; // 初期値はクリックされていない状態
               const sensitiveContent = document.createElement("div");
               const sensitiveText = document.createElement("div");
-              sensitiveText.textContent = "センシティブなコンテンツ、閲覧するにはクリック";
+              sensitiveText.textContent = "content-warning！閲覧するにはクリック";
               sensitiveText.style.color = "red"; // テキストの色を赤に設定
               sensitiveText.style.cursor = "pointer"; // カーソルをポインターに変更
               sensitiveContent.appendChild(sensitiveText);
