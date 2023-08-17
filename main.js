@@ -132,24 +132,7 @@ const searchPosts = async () => {
       // 投稿を表示するための要素を作成
       const postContainer = document.createElement("div");
 
-      if (imgMatches.length > 0) {
-        // 画像がある場合の処理
-        const imageContainer = document.createElement("div");
 
-        for (const match of imgMatches) {
-          const imageUrl = match[0];
-
-          // 画像を表示するための要素を作成
-          const imageElement = document.createElement("img");
-          imageElement.src = imageUrl;
-          //画像の調整
-          imageElement.style.maxWidth = "60%";
-          imageElement.style.height = "auto";
-          //画像をimageContainerに追加
-         // imageContainer.appendChild(imageElement);
-        }
-
-      }
       
       switch (true) {
           // センシティブなコンテンツの場合の処理
