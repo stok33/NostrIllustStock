@@ -181,8 +181,8 @@ const searchPosts = async () => {
                           const Sensitiveimage = document.createElement("img");
                           Sensitiveimage.src = SensitiveimageUrl;
                           //画像の調整
-                          Sensitiveimage.style.maxWidth = "60%";
-                          Sensitiveimage.style.height = "auto";
+                          Sensitiveimage.style.maxWidth = "auto";
+                          Sensitiveimage.style.height = "300px";
                           //画像をpostContainerに追加
                           postContainer.appendChild(Sensitiveimage);
                       }
@@ -217,8 +217,8 @@ const searchPosts = async () => {
                 const imageElement = document.createElement("img");
                 imageElement.src = imageUrl;
                 //画像の調整
-                imageElement.style.maxWidth = "60%";
-                imageElement.style.height = "auto";
+                imageElement.style.maxWidth = "auto";
+                imageElement.style.height = "300px";
                 //画像をpostContainerに追加
                 postContainer.appendChild(imageElement);
               }
