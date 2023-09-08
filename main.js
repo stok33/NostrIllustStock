@@ -1,8 +1,8 @@
 const currUnixtime = () => Math.floor(new Date().getTime() / 1000);
 
-const relayUrl = "wss://relay-jp.nostr.wirednet.jp";
 /* 入力された公開鍵を取得byAIchan*/
 const searchPosts = async () => {
+    //npubを入力欄から取得　あとでhex変換するので上書きできるletを使う
   const npubInput = document.getElementById("npubInput");
   let npub = npubInput.value;
 
@@ -22,6 +22,10 @@ const searchPosts = async () => {
 		  console.error("エラー：これは…公開鍵じゃないね　");
           alert("公開鍵じゃないな　……何じゃ？");
 	}
+    
+    //リレーURLを入力欄から取得
+  const relayInput = document.getElementById("relayInput");
+  const relayUrl = relayInput.value;
 
 
   /* Q-1: nostr-toolsのRelayオブジェクトを初期化してみよう */
