@@ -133,7 +133,7 @@ const searchPosts = async () => {
       const isSensitive = tags.some(tag => tag[0] === 'content-warning');
 
       const noteId = NostrTools.nip19.noteEncode(Id); //noteidをnote~形式に直す
-      const nevent = NostrTools.nip19.neventEncode(Id); //neventに直す
+      const nevent = NostrTools.nip19.neventEncode({id:'Id'}); //neventに直す
 
       // 投稿を表示するための要素を作成
       const postContainer = document.createElement("div");
