@@ -121,7 +121,7 @@ const searchPosts = async () => {
     try {
       const content = ev.content; // contentタグの内容を取得
       const Id = ev.id // idタグの内容（ここではnoteid）を取得
-	    console.log(Id);
+	    console.log("Id:", Id);
       const tags = ev.tags; // tags配列を取得
 
       // contentタグ内に直リンクの画像URLがあるかチェック
