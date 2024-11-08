@@ -133,7 +133,9 @@ const searchPosts = async () => {
       const isSensitive = tags.some(tag => tag[0] === 'content-warning');
 
       const noteId = NostrTools.nip19.noteEncode(Id); //noteidをnote~形式に直す
+	    console.log("noteId:", noteId);
       const nevent = NostrTools.nip19.neventEncode({id: Id}); //neventに直す
+	    console.log("nevent:", nevent);
 
       // 投稿を表示するための要素を作成
       const postContainer = document.createElement("div");
@@ -191,9 +193,9 @@ const searchPosts = async () => {
                       sensitiveContent.appendChild(Sensitivetext);
                       
                       // noteidの表示
-                      const idElement = document.createElement("div");
-                      idElement.textContent = noteId;　//表示する文字列をnoteidにする
-                      postContainer.appendChild(idElement);
+            //          const idElement = document.createElement("div");
+             //         idElement.textContent = noteId;　//表示する文字列をnoteidにする
+             //         postContainer.appendChild(idElement);
 			//nevent→njumpのリンク
 		      const neventElement = document.createElement("a"); //divじゃなくてaたぐ
 	　　　　	　　　　neventElement.href = `https://nostr.com/${nevent}`; // href属性にnjumpのurl
@@ -234,9 +236,9 @@ const searchPosts = async () => {
               postContainer.appendChild(textContainer);
       
               //noteidの表示
-              const idElement = document.createElement("div");
-              idElement.textContent = noteId;
-              postContainer.appendChild(idElement);
+        //      const idElement = document.createElement("div");
+        //      idElement.textContent = noteId;
+         //     postContainer.appendChild(idElement);
 	　　　　//nevent→njumpのリンク
               const neventElement = document.createElement("a"); 
 	　　　　neventElement.href = `https://nostr.com/${nevent}`; 
