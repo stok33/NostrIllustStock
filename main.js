@@ -46,11 +46,11 @@ const searchPosts = async () => {
     }
 
   ]);
-  //kind1にフィルター（100イベント、illustタグつき、指定した公開鍵からの投稿）つけて購読
+  //kind1にフィルター（200イベント、illustタグつき、指定した公開鍵からの投稿）つけて購読
   const sub = relay.sub([
     {
         "kinds": [1],
-        "limit": 100,
+        "limit": 200,
         "#t":["illust"],
         "authors": [npub]
         // 作者の公開鍵
@@ -132,6 +132,7 @@ const searchPosts = async () => {
       const isSensitive = tags.some(tag => tag[0] === 'content-warning');
 
       const noteId = NostrTools.nip19.noteEncode(Id); //noteidをNIP-19ぱわーでnote~形式に直す
+      const nevent = NostrTools.nip19.neventEncode(Id); //neventに直す
 
       // 投稿を表示するための要素を作成
       const postContainer = document.createElement("div");
@@ -165,21 +166,12 @@ const searchPosts = async () => {
                       sensitiveContentClicked = true; // クリック状態をtrueに設定
                       // クリック時の処理：画像を表示する
                       sensitiveContent.innerHTML = ''; // テキストをクリア
-                      
-                      // ryoさんの36避けサービス用にURLを置換する関数を作成(不要)
-                      //function replaceImageUrl(url) {
-                      //    if (url.startsWith("https://i.ryogrid.net/i/")) {
-                      //        return url.replace("https://i.ryogrid.net/i/", "https://cdn.nostr.build/i/");}
-                      //    return url;
-                      //}
+                
                       
                       // 画像を表示するための要素を作成
                       for (const match of imgMatches) {
                           const SensitiveimageUrl = match[0];
-                          
-                          //ryoさんのサービス用関数に引数として画像URLを渡す(不要)
-                         // const convertedImageUrl = replaceImageUrl(SensitiveimageUrl);
-                          
+                         
                           // 画像を表示するための要素を作成
                           const Sensitiveimage = document.createElement("img");
                           Sensitiveimage.src = SensitiveimageUrl;
@@ -199,8 +191,14 @@ const searchPosts = async () => {
                       
                       // noteidの表示
                       const idElement = document.createElement("div");
-                      idElement.textContent = noteId;
+                      idElement.textContent = noteId;　//表示する文字列をnoteidにする
                       postContainer.appendChild(idElement);
+			//nevent→njumpのリンク
+		      const neventElement = document.createElement("a"); //divじゃなくてaたぐ
+	　　　　	　　　　neventElement.href = `https://nostr.com/${nevent}`; // href属性にnjumpのurl
+	　　　	　　　　neventElement.textContent = "投稿をみる(njump)"; //リンク文字列
+	　　　	　　　　neventElement.target = "_blank"; // 新しいタブで開く
+	　　　	　　　　postContainer.appendChild(neventElement); 
                   }
 
               });
@@ -238,7 +236,14 @@ const searchPosts = async () => {
               const idElement = document.createElement("div");
               idElement.textContent = noteId;
               postContainer.appendChild(idElement);
-              break;
+	　　　　//nevent→njumpのリンク
+              const neventElement = document.createElement("a"); 
+	　　　　neventElement.href = `https://nostr.com/${nevent}`; 
+	　　　　neventElement.textContent = "投稿をみる(njump)"; 
+	　　　　neventElement.target = "_blank"; 
+	　　　　postContainer.appendChild(neventElement); 
+              
+	　　　　break;
               
         //画像なしの場合、なにもしない
         default:
