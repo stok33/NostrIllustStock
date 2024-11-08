@@ -121,6 +121,7 @@ const searchPosts = async () => {
     try {
       const content = ev.content; // contentタグの内容を取得
       const Id = ev.id // idタグの内容（ここではnoteid）を取得
+	    console.log(Id);
       const tags = ev.tags; // tags配列を取得
 
       // contentタグ内に直リンクの画像URLがあるかチェック
@@ -131,7 +132,7 @@ const searchPosts = async () => {
       // センシティブなコンテンツのチェック
       const isSensitive = tags.some(tag => tag[0] === 'content-warning');
 
-      const noteId = NostrTools.nip19.noteEncode(Id); //noteidをNIP-19ぱわーでnote~形式に直す
+      const noteId = NostrTools.nip19.noteEncode(Id); //noteidをnote~形式に直す
       const nevent = NostrTools.nip19.neventEncode(Id); //neventに直す
 
       // 投稿を表示するための要素を作成
