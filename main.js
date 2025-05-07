@@ -148,8 +148,7 @@ const searchPosts = async () => {
               let sensitiveContentClicked = false; // 初期値はクリックされていない状態
               const sensitiveContent = document.createElement("div");
               const sensitiveText = document.createElement("div");
-              sensitiveText.textContent = "[content-warning！閲覧するにはクリック]";
-              sensitiveText.style.color = "red"; // テキストの色を赤に設定
+              sensitiveText.textContent = "[content-warning！閲覧するにはクリックしてください]";
               sensitiveText.style.cursor = "pointer"; // カーソルをポインターに変更
               sensitiveContent.appendChild(sensitiveText);
 
@@ -158,7 +157,6 @@ const searchPosts = async () => {
               if (reasonTag && reasonTag[1]) {
                   const reasonElement = document.createElement("div");
                   reasonElement.textContent = `理由: ${reasonTag[1]}`;
-                  reasonElement.style.color = "red"; // テキストの色を赤に設定
                   sensitiveContent.appendChild(reasonElement);
               }
               
@@ -196,10 +194,10 @@ const searchPosts = async () => {
             //          const idElement = document.createElement("div");
              //         idElement.textContent = noteId;　//表示する文字列をnoteidにする
              //         postContainer.appendChild(idElement);
-			//nevent→njumpのリンク
+			//nevent→nostterのリンク
 		      const neventElement = document.createElement("a"); //divじゃなくてaたぐ
-	　　　　	　　　　neventElement.href = `https://nostr.com/${nevent}`; // href属性にnjumpのurl
-	　　　	　　　　neventElement.textContent = "投稿をみる(njump)"; //リンク文字列
+	　　　　	　　　　neventElement.href = `https://nostter.app/${nevent}`; // href属性にnostterのurl
+	　　　	　　　　neventElement.textContent = "投稿をみる(nostter)"; //リンク文字列
 	　　　	　　　　neventElement.target = "_blank"; // 新しいタブで開く
 	　　　	　　　　postContainer.appendChild(neventElement); 
                   }
@@ -239,11 +237,11 @@ const searchPosts = async () => {
         //      const idElement = document.createElement("div");
         //      idElement.textContent = noteId;
          //     postContainer.appendChild(idElement);
-	　　　　//nevent→njumpのリンク
-              const neventElement = document.createElement("a"); 
-	　　　　neventElement.href = `https://nostr.com/${nevent}`; 
-	　　　　neventElement.textContent = "投稿をみる(njump)"; 
-	　　　　neventElement.target = "_blank"; 
+	　　　　//nevent→nostterのリンク
+              const neventElement = document.createElement("a"); //divじゃなくてaたぐ
+	　　　　neventElement.href = `https://nostter.app/${nevent}`; // href属性にnostterのurl
+	　　　　neventElement.textContent = "投稿をみる(nostter)"; //リンク文字列
+　　　	　　　　neventElement.target = "_blank"; // 新しいタブで開く
 	　　　　postContainer.appendChild(neventElement); 
               
 	　　　　break;
