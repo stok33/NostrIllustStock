@@ -1,124 +1,10 @@
 const currUnixtime = () => Math.floor(new Date().getTime() / 1000);
+let CreatedAt_last = null;
+let Relay_remember = null;
+let Npub_remember = null;
 
-/* 入力された公開鍵を取得byAIchan*/
-const searchPosts = async () => {
-    //npubを入力欄から取得　あとでhex変換するので上書きできるletを使う
-  const npubInput = document.getElementById("npubInput");
-  let npub = npubInput.value;
-
-/*取得したnpubをhexに変換*/
-  const { type, data } = NostrTools.nip19.decode(npub);
-	switch (type) {
-  		case "npub":
-    		  npub = data;
-    		break;
-  		case "nprofile":
-    		  npub = data.pubkey;
-    		break;
-  		case "nsec":
-		  console.error("エラー: これは秘密鍵…　公開鍵はnpubで始まる方");
-          alert("わわ！これは秘密鍵じゃ！秘密にするのじゃ〜！！");
-  		default:
-		  console.error("エラー：これは…公開鍵じゃないね　");
-          alert("公開鍵じゃないな　……何じゃ？");
-	}
-    
-    //リレーURLを入力欄から取得
-  const relayInput = document.getElementById("relayInput");
-  const relayUrl = relayInput.value;
-
-
-  /* Q-1: nostr-toolsのRelayオブジェクトを初期化してみよう */
-  const relay = NostrTools.relayInit(relayUrl);
-  relay.on("error", () => {
-    console.error("failed to connect");
-  });
-
-  /* Q-2: Relayオブジェクトのメソッドを呼び出して、リレーに接続してみよう */
-  await relay.connect(relayUrl);
-
-  /* Q-3: Relayオブジェクトのメソッドを使って、イベントを購読してみよう */
-  //kind0を購読
-  const sub0 = relay.sub([
-    {
-        "kinds":[0],
-        "authors":[npub]
-    }
-
-  ]);
-  //kind1にフィルター（200イベント、illustタグつき、指定した公開鍵からの投稿）つけて購読
-  const sub = relay.sub([
-    {
-        "kinds": [1],
-        "limit": 200,
-        "#t":["illust"],
-        "authors": [npub]
-        // 作者の公開鍵
-	
-    }
-  ]);
-  
-  const profContainer = document.getElementById("profContainer");
-  profContainer.innerHTML = ""; // コンテナをクリア
-    
-  const illustContainer = document.getElementById("illustContainer");
-  illustContainer.innerHTML = ""; // コンテナをクリア
-
-  // メッセージタイプごとにリスナーを設定できる
-  
-  //kind0の方
-  sub0.on("event", (pf) => {
-    console.log(pf);
-
-    try {
-      const profcontent = JSON.parse(pf.content); // eventJSON文字列をオブジェクトに変換
-      const profpicture = profcontent.picture;//content内のpictureの値を取得
-      const profdisplayname = profcontent.display_name; // content内のdisplay_nameの値を取得
-      const profname = profcontent.name; // content内のnameの値を取得
-      const profabout = profcontent.about; // content内のaboutの値を取得
-      console.log(profname);
-      
-      // プロフィールを表示するための要素を作成
-      const kind0Container = document.createElement("div");
-      
-      // プロフィールを表示するための部分にアイコンとdisplay_nameとnameと自己紹介を追加
-      //アイコン
-      const imageElement = document.createElement("img");
-      imageElement.src = profpicture;
-      imageElement.style.maxWidth = "100px"; // 最大幅制限
-      imageElement.style.height = "auto"; // 高さは自動調整
-      kind0Container.appendChild(imageElement);  // プロフィールを表示する要素に追加
-      //display_name　表示名
-      const displaynameElement = document.createElement("div");
-      displaynameElement.textContent = profdisplayname;
-      kind0Container.appendChild(displaynameElement); // プロフィールを表示する要素に追加
-      //name　アットマークの後
-      const nameElement = document.createElement("div");
-      nameElement.textContent = profname;
-      kind0Container.appendChild(nameElement); // プロフィールを表示する要素に追加
-      //自己紹介欄
-      const aboutElement = document.createElement("div");
-      aboutElement.textContent = profabout;
-      kind0Container.appendChild(aboutElement); // プロフィールを表示する要素に追加
-
-      // 全部まとめてプロフィールコンテナに追加
-      profContainer.appendChild(kind0Container);
-    } catch (err) {
-      console.error(err);
-    }
-  });
-
-
-
-  sub0.on("eose", () => {
-    console.log("****** EOSE ******");
-  });
-
-  //kind1の方
-　sub.on("event", (ev) => {
-    console.log(ev);
-
-    try {
+function display_kind1(ev) {
+	try {
       const content = ev.content; // contentタグの内容を取得
       const Id = ev.id // idタグの内容（ここではnoteid）を取得
 	    console.log("Id:", Id);
@@ -258,13 +144,169 @@ const searchPosts = async () => {
       illustContainer.appendChild(postContainer);
       //境界線追加
       illustContainer.appendChild(document.createElement("hr"));
+  } catch (err) {
+      console.error(err);
+  }
+}
+
+/* 入力された公開鍵を取得byAIchan*/
+const searchPosts = async () => {
+    //npubを入力欄から取得　あとでhex変換するので上書きできるletを使う
+  const npubInput = document.getElementById("npubInput");
+  let npub = npubInput.value;
+
+/*取得したnpubをhexに変換*/
+  const { type, data } = NostrTools.nip19.decode(npub);
+	switch (type) {
+  		case "npub":
+    		  npub = data;
+    		break;
+  		case "nprofile":
+    		  npub = data.pubkey;
+    		break;
+  		case "nsec":
+		  console.error("エラー: これは秘密鍵…　公開鍵はnpubで始まる方");
+          alert("わわ！これは秘密鍵じゃ！秘密にするのじゃ〜！！");
+  		default:
+		  console.error("エラー：これは…公開鍵じゃないね　");
+          alert("公開鍵じゃないな　……何じゃ？");
+	}
+    
+    //リレーURLを入力欄から取得
+  const relayInput = document.getElementById("relayInput");
+  const relayUrl = relayInput.value;
+
+
+  /* Q-1: nostr-toolsのRelayオブジェクトを初期化してみよう */
+  const relay = NostrTools.relayInit(relayUrl);
+  relay.on("error", () => {
+    console.error("failed to connect");
+  });
+
+  /* Q-2: Relayオブジェクトのメソッドを呼び出して、リレーに接続してみよう */
+  await relay.connect(relayUrl);
+
+  Relay_remember = relay; //relayを「次へ」押した時にも使えるように覚えておきましょうね
+  Npub_remember = npub; //npubを「次へ」以下略
+
+  /* Q-3: Relayオブジェクトのメソッドを使って、イベントを購読してみよう */
+  //kind0を購読
+  const sub0 = relay.sub([
+    {
+        "kinds":[0],
+        "authors":[npub]
+    }
+
+  ]);
+  //kind1にフィルター（10イベント、illustタグつき、指定した公開鍵からの投稿）つけて購読
+  const sub = relay.sub([
+    {
+        "kinds": [1],
+        "limit": 10,
+        "#t":["illust"],
+        "authors": [npub]
+        // 作者の公開鍵
+	
+    }
+  ]);
+  
+  const profContainer = document.getElementById("profContainer");
+  profContainer.innerHTML = ""; // コンテナをクリア
+    
+  const illustContainer = document.getElementById("illustContainer");
+  illustContainer.innerHTML = ""; // コンテナをクリア
+
+  // メッセージタイプごとにリスナーを設定できる
+  
+  //kind0の方
+  sub0.on("event", (pf) => {
+	// 10個受信した中で一番古い投稿をCreatedAt_lastに記録する
+	if (!CreatedAt_last || ev.created_at < CreatedAt_last) {
+    CreatedAt_last = ev.created_at;
+	}
+
+    console.log(pf);
+
+    try {
+      const profcontent = JSON.parse(pf.content); // eventJSON文字列をオブジェクトに変換
+      const profpicture = profcontent.picture;//content内のpictureの値を取得
+      const profdisplayname = profcontent.display_name; // content内のdisplay_nameの値を取得
+      const profname = profcontent.name; // content内のnameの値を取得
+      const profabout = profcontent.about; // content内のaboutの値を取得
+      console.log(profname);
+      
+      // プロフィールを表示するための要素を作成
+      const kind0Container = document.createElement("div");
+      
+      // プロフィールを表示するための部分にアイコンとdisplay_nameとnameと自己紹介を追加
+      //アイコン
+      const imageElement = document.createElement("img");
+      imageElement.src = profpicture;
+      imageElement.style.maxWidth = "100px"; // 最大幅制限
+      imageElement.style.height = "auto"; // 高さは自動調整
+      kind0Container.appendChild(imageElement);  // プロフィールを表示する要素に追加
+      //display_name　表示名
+      const displaynameElement = document.createElement("div");
+      displaynameElement.textContent = profdisplayname;
+      kind0Container.appendChild(displaynameElement); // プロフィールを表示する要素に追加
+      //name　アットマークの後
+      const nameElement = document.createElement("div");
+      nameElement.textContent = profname;
+      kind0Container.appendChild(nameElement); // プロフィールを表示する要素に追加
+      //自己紹介欄
+      const aboutElement = document.createElement("div");
+      aboutElement.textContent = profabout;
+      kind0Container.appendChild(aboutElement); // プロフィールを表示する要素に追加
+
+      // 全部まとめてプロフィールコンテナに追加
+      profContainer.appendChild(kind0Container);
     } catch (err) {
       console.error(err);
     }
   });
 
 
+
+  sub0.on("eose", () => {
+    console.log("****** EOSE ******");
+  });
+
+  //kind1の方
+　sub.on("event", (ev) => {
+	if (!CreatedAt_last || ev.created_at < CreatedAt_last) {
+    	CreatedAt_last = ev.created_at;
+    }
+  	display_kind1(ev); //表示処理は関数display_kind1さん、出番ですよ
+	 
+  	console.log(ev);
+
+  });
+
+
   sub.on("eose", () => {
     console.log("****** EOSE ******");
+  });
+};
+
+const loadMorePosts = async () => { //「次へ」を押されたとき
+  if (!Relay_remember || !Npub_remember || !CreatedAt_last) return;
+
+  const sub = Relay_remember.sub([ //1回目の読み込みで覚えたリレーを使いますよ
+    {
+      kinds: [1],
+      limit: 10,
+      "#t": ["illust"],
+      authors: [Npub_remember], //1回目の読み込みで覚えたnpubを使いますよ
+      until: CreatedAt_last - 1 //前回の読み込みで一番古かったものよりも、1つ古いやつまで
+    }
+  ]);
+
+  sub.on("event", (ev) => {
+    if (!CreatedAt_last || ev.created_at < CreatedAt_last) {
+    	CreatedAt_last = ev.created_at;
+    }
+  	display_kind1(ev); 
+	 
+  	console.log(ev);
   });
 };
