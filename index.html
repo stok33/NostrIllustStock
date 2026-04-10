@@ -5,7 +5,7 @@
     	<meta charset="utf-8">
     	<meta http-equiv="X-UA-Compatible" content="IE=edge">
    	<meta property="og:title" content="Nostr井ラスト倉庫">
-	<meta property="og:description" content="指定したNostrユーザーの「#illust」タグつき投稿を見れます">
+	<meta property="og:description" content="「#illust」タグつき投稿を見れるメディア欄クライアント">
 	<meta property="og:image" content="https://stok33.github.io/NostrIllustStock/倉庫.png">
 	<meta property="og:url" content="https://stok33.github.io/NostrIllustStock/">
 	<meta property="og:type" content="website">
@@ -28,15 +28,15 @@
   <label for="npubInput">ユーザーの公開鍵：</label><br>
   <input class="custom-input" type="text" id="npubInput" placeholder="npub〜"><br>
   <label for="relayInput">見たいリレーURL：</label><br>
-  <input class="custom-input" type="text" id="relayInput" placeholder="wss://〜" value="wss://relay-jp.nostr.wirednet.jp">
-  <button onclick="searchPosts()">イラストを検索！</button>
+  <input class="custom-input" type="text" id="relayInput" placeholder="wss://〜" value="wss://yabu.me">
+  <button onclick="searchPosts()">illustを検索！</button>
     <div id="alertarea">
       <!-- アラート内容-->
     </div>
-  <p>サンプルnpub(作成者・崇徳の公開鍵)：npub1e09suzmq9mp6nt0ud9ttl03790qjx70wzwlc2pwwghcusvwju54qs0c800</p>
+  <p>サンプルnpub(作成者の公開鍵)：npub1e09suzmq9mp6nt0ud9ttl03790qjx70wzwlc2pwwghcusvwju54qs0c800</p>
   <ul>
-    <li>公開鍵で指定したユーザーが投稿している「#illust」タグつきの投稿を200件まで表示するよ</li>
-    <li>nostrでイラストを投稿するときに「#illust」をつけて投稿するとメディア欄的な使い方ができます、自分の描いた絵の振り返りなどにどうぞ</li>
+    <li>ユーザーを指定すると「#illust」タグつきの画像投稿のみ見れます</li>
+    <li>Nostrでイラストを投稿するときに「#illust」をつけて投稿するとメディア欄的な使い方ができます</li>
     <li>「投稿をみる」を押すとnostterで投稿を開きます</li>
     <li>NIP-36(閲覧注意)対応済み。該当の投稿には「content-warning！閲覧するにはクリックしてください」と表示されます</li>
     <li>画像は直リンクそのまま取ってくるのでデータ通信量などご注意ください！</li>
