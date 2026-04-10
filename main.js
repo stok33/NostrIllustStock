@@ -129,7 +129,7 @@ function display_kind1(ev) {
                 
                       	//表示関連は関数にお任せ
 						arrange_Images(postContainer, imgMatches);
-      					arrange_Text(sensitiveContent, content, imgRegex);
+      					arrange_Texts(sensitiveContent, content, imgRegex);
       					make_nostterLink(postContainer, nevent);
 
 						/*
@@ -179,7 +179,7 @@ function display_kind1(ev) {
 
               	//表示関連は関数にお任せ
 				arrange_Images(postContainer, imgMatches);
-      			arrange_Text(sensitiveContent, content, imgRegex);
+      			arrange_Texts(sensitiveContent, content, imgRegex);
       			make_nostterLink(postContainer, nevent);
 				
 				/*
