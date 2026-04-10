@@ -15,24 +15,33 @@ function arrange_Images(container, imgMatches) {
     img.src = match[0]; //matchの配列からurlとってくる
 	img.style.maxWidth = "auto"; //幅
     img.style.height = "300px"; //高さ
+	  
     container.appendChild(img); //画像をcontainerに追加
   }
 }
 
 //テキストを整える
 function arrange_Texts(container, content, imgRegex) {
-  const text = document.createElement("div");
-  text.textContent = content.replace(imgRegex, "");　// 不要なURLを削除してテキストを設定
-  container.appendChild(text);　//テキストをcontainerに追加
+	const text = document.createElement("div");
+	container.style.wordBreak = "break-word"; //よしなに改行して欲しい
+	let cleanText = content.replace(imgRegex, "");　// 不要なURLを削除して純粋なテキストを設定
+	// 最大文字数制限
+  	const MAX_LENGTH = 200;
+  	if (cleanText.length > MAX_LENGTH) {
+    	cleanText = cleanText.slice(0, MAX_LENGTH) + "..."; //MAX文字数超えたら切る
+  	}
+	text.textContent = cleanText
+	
+	container.appendChild(text);　//テキストをcontainerに追加
 }
 
 //nostterリンクを作る
 function make_nostterLink(container, nevent) {
-  const link = document.createElement("a");　//ここはdivじゃなくてaタグ
-  link.href = `https://nostter.app/${nevent}`;　// href属性にnostterのurl
-  link.textContent = "投稿をみる(nostter)";　//リンク文字列
-  link.target = "_blank";　// 新しいタブで開く
-  container.appendChild(link); //リンクをcontainerに追加
+  	const link = document.createElement("a");　//ここはdivじゃなくてaタグ
+  	link.href = `https://nostter.app/${nevent}`;　// href属性にnostterのurl
+  	link.textContent = "投稿をみる(nostter)";　//リンク文字列
+  	link.target = "_blank";　// 新しいタブで開く
+  	container.appendChild(link); //リンクをcontainerに追加
 }
 
 //kind0部分の処理
@@ -105,18 +114,19 @@ function display_kind1(ev) {
               	let sensitiveContentClicked = false; // 初期値はクリックされていない状態
 
 				//content-warning表示
-              	const sensitiveContent = document.createElement("div");
+              	const sensitiveContainer = document.createElement("div");
               	const sensitiveText = document.createElement("div");
-              	sensitiveText.textContent = "[content-warning！閲覧するにはクリックしてください]";
+              	sensitiveText.textContent = "[content-warning！\nクリックで表示]";
+				sensitiveText.style.whiteSpace = "pre-line"; //改行の調整
               	sensitiveText.style.cursor = "pointer"; // カーソルをポインターに変更
-              	sensitiveContent.appendChild(sensitiveText);
+              	sensitiveContainer.appendChild(sensitiveText);
 
               	//content-warningの理由表示
               	const reasonTag = tags.find(tag => tag[0] === 'content-warning');
               	if (reasonTag && reasonTag[1]) {
                   	const reasonElement = document.createElement("div");
                   	reasonElement.textContent = `理由: ${reasonTag[1]}`;
-                  	sensitiveContent.appendChild(reasonElement);
+                  	sensitiveContainer.appendChild(reasonElement);
               	}
               
               
@@ -179,7 +189,7 @@ function display_kind1(ev) {
 
               	//表示関連は関数にお任せ
 				arrange_Images(postContainer, imgMatches);
-      			arrange_Texts(sensitiveContent, content, imgRegex);
+      			arrange_Texts(postContainer, content, imgRegex);
       			make_nostterLink(postContainer, nevent);
 				
 				/*
