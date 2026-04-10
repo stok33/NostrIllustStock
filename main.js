@@ -8,6 +8,34 @@ let isLoading = false;
 let lastClickTime = 0;
 const CLICK_INTERVAL = 500; // ミリ秒（0.5秒）
 
+//画像を整える
+function arrange_Images(container, imgMatches) {
+  for (const match of imgMatches) {
+    const img = document.createElement("img");
+    img.src = match[0]; //matchの配列からurlとってくる
+	img.style.maxWidth = "auto"; //幅
+    img.style.height = "300px"; //高さ
+    container.appendChild(img); //画像をcontainerに追加
+  }
+}
+
+//テキストを整える
+function arrange_Texts(container, content, imgRegex) {
+  const text = document.createElement("div");
+  text.textContent = content.replace(imgRegex, "");　// 不要なURLを削除してテキストを設定
+  container.appendChild(text);　//テキストをcontainerに追加
+}
+
+//nostterリンクを作る
+function make_nostterLink(container, nevent) {
+  const link = document.createElement("a");　//ここはdivじゃなくてaタグ
+  link.href = `https://nostter.app/${nevent}`;　// href属性にnostterのurl
+  link.textContent = "投稿をみる(nostter)";　//リンク文字列
+  link.target = "_blank";　// 新しいタブで開く
+  container.appendChild(link); //リンクをcontainerに追加
+}
+
+//kind0部分の処理
 function display_kind0(pf) {
 	try {
     	const profcontent = JSON.parse(pf.content); // eventJSON文字列をオブジェクトに変換
@@ -47,6 +75,7 @@ function display_kind0(pf) {
   	}
 }
 
+//kind1部分の処理
 function display_kind1(ev) {
 	try {
       	const content = ev.content; // contentタグの内容を取得
@@ -69,20 +98,20 @@ function display_kind1(ev) {
 
       	// 投稿を表示するための要素を作成
       	const postContainer = document.createElement("div");
-
-
       
       	switch (true) {
-          	// センシティブなコンテンツの場合の処理
+          	// センシティブな画像付き投稿
         	case isSensitive && imgMatches.length > 0:
               	let sensitiveContentClicked = false; // 初期値はクリックされていない状態
+
+				//content-warning表示
               	const sensitiveContent = document.createElement("div");
               	const sensitiveText = document.createElement("div");
               	sensitiveText.textContent = "[content-warning！閲覧するにはクリックしてください]";
               	sensitiveText.style.cursor = "pointer"; // カーソルをポインターに変更
               	sensitiveContent.appendChild(sensitiveText);
 
-              	// 理由表示
+              	//content-warningの理由表示
               	const reasonTag = tags.find(tag => tag[0] === 'content-warning');
               	if (reasonTag && reasonTag[1]) {
                   	const reasonElement = document.createElement("div");
@@ -91,16 +120,21 @@ function display_kind1(ev) {
               	}
               
               
-              	// クリックイベントを設定
+              	//クリックイベントを設定
               	sensitiveContent.addEventListener("click", () => {
                   	if (!sensitiveContentClicked) { // クリックは一回まで！クリックしてない場合のみ処理が行われる
                       	sensitiveContentClicked = true; // クリック状態をtrueに設定
                       	// クリック時の処理：画像を表示する
                       	sensitiveContent.innerHTML = ''; // テキストをクリア
                 
-                      
-                      	// 画像を表示するための要素を作成
-                      	for (const match of imgMatches) {
+                      	//表示関連は関数にお任せ
+						arrange_Images(postContainer, imgMatches);
+      					arrange_Text(sensitiveContent, content, imgRegex);
+      					make_nostterLink(postContainer, nevent);
+
+						/*
+						// 画像を表示するための要素を作成
+						for (const match of imgMatches) {
                           	const SensitiveimageUrl = match[0];
                          
                           	// 画像を表示するための要素を作成
@@ -131,6 +165,7 @@ function display_kind1(ev) {
 	　　　	　　			neventElement.textContent = "投稿をみる(nostter)"; //リンク文字列
 	　　　	　　			neventElement.target = "_blank"; // 新しいタブで開く
 	　　　	　　			postContainer.appendChild(neventElement); 
+						*/
                 	}
 
         		});
@@ -139,10 +174,16 @@ function display_kind1(ev) {
               
               	break;
               
-        	// センシティブでないコンテンツで画像付きの場合
+        	//センシティブでない画像付き投稿
         	case !isSensitive && imgMatches.length > 0:
 
-              	// 画像を表示するための要素を作成
+              	//表示関連は関数にお任せ
+				arrange_Images(postContainer, imgMatches);
+      			arrange_Text(sensitiveContent, content, imgRegex);
+      			make_nostterLink(postContainer, nevent);
+				
+				/*
+				// 画像を表示するための要素を作成
               	for (const match of imgMatches) {
                 	const imageUrl = match[0];
 
@@ -157,135 +198,143 @@ function display_kind1(ev) {
               	}
 
         
-              // テキストコンテンツを表示するための要素を作成
-              const textContainer = document.createElement("div");
-              // 不要なURLを削除してテキストを設定
-              textContainer.textContent = content.replace(imgRegex, "");
-              //テキスト部分を投稿表示のための要素postContainerに追加
-              postContainer.appendChild(textContainer);
+              	// テキストコンテンツを表示するための要素を作成
+              	const textContainer = document.createElement("div");
+              	// 不要なURLを削除してテキストを設定
+              	textContainer.textContent = content.replace(imgRegex, "");
+              	//テキスト部分を投稿表示のための要素postContainerに追加
+              	postContainer.appendChild(textContainer);
       
-              //noteidの表示
-        //      const idElement = document.createElement("div");
-        //      idElement.textContent = noteId;
-         //     postContainer.appendChild(idElement);
-	　　　　//nevent→nostterのリンク
-              const neventElement = document.createElement("a"); //divじゃなくてaタグ
-	　　　　neventElement.href = `https://nostter.app/${nevent}`; // href属性にnostterのurl
-	　　　　neventElement.textContent = "投稿をみる(nostter)"; //リンク文字列
-　　　	　　　　neventElement.target = "_blank"; // 新しいタブで開く
-	　　　　postContainer.appendChild(neventElement); 
+              	//noteidの表示
+        		//const idElement = document.createElement("div");
+        		//idElement.textContent = noteId;
+         		//postContainer.appendChild(idElement);
+	　　　　		//nevent→nostterのリンク
+
+				//nostterurl
+              	const neventElement = document.createElement("a"); //divじゃなくてaタグ
+	　　　　		neventElement.href = `https://nostter.app/${nevent}`; // href属性にnostterのurl
+	　　　　		neventElement.textContent = "投稿をみる(nostter)"; //リンク文字列
+　　　	　　　　	neventElement.target = "_blank"; // 新しいタブで開く
+	　　　　		postContainer.appendChild(neventElement); 
+				*/
               
-	　　　　break;
+	　　　　	break;
               
-        //画像なしの場合、なにもしない
-        default:
+        	//画像なしの場合は処理を終わる
+        	default:
+				return;
               
-    };
-      //postContainerを一つの投稿表示欄illustContainerに追加
-      illustContainer.appendChild(postContainer);
-      //境界線追加
-      illustContainer.appendChild(document.createElement("hr"));
-  } catch (err) {
-      console.error(err);
-  }
+    	};
+		
+      	//postContainerを一つの投稿表示欄illustContainerに追加
+      	illustContainer.appendChild(postContainer);
+      	//境界線追加
+      	illustContainer.appendChild(document.createElement("hr"));
+  	} catch (err) {
+    	console.error(err);
+  	}
 }
 
-//入力された公開鍵を取得
+//初回の処理
 const searchPosts = async () => {
-　//npubを入力欄から取得
-  const npubInput = document.getElementById("npubInput");
-  let npub = npubInput.value; //あとでhex変換するので、上書きできるletを使う
+	//npubを入力欄から取得
+  	const npubInput = document.getElementById("npubInput");
+	let npub = npubInput.value; //あとでhex変換するので、上書きできるletを使う
 
-  //取得したnpubをhexに変換
-  const { type, data } = NostrTools.nip19.decode(npub);
+  	//取得したnpubをhexに変換
+  	const { type, data } = NostrTools.nip19.decode(npub);
 	switch (type) {
   		case "npub":
-    		  npub = data;
+    		npub = data;
     		break;
   		case "nprofile":
-    		  npub = data.pubkey;
+    		npub = data.pubkey;
     		break;
   		case "nsec":
-		  console.error("エラー: これは秘密鍵…　公開鍵はnpubで始まる方");
-          alert("わわ！これは秘密鍵じゃ！秘密にするのじゃ〜！！");
+		  	console.error("エラー: これは秘密鍵…　公開鍵はnpubで始まる方");
+          	alert("わわ！これは秘密鍵じゃ！秘密にするのじゃ〜！！");
   		default:
-		  console.error("エラー：これは…公開鍵じゃないね　");
-          alert("公開鍵じゃないな　……何じゃ？");
+		  	console.error("エラー：これは…公開鍵じゃないね　");
+          	alert("公開鍵じゃないな　……何じゃ？");
 	}
     
-  //リレーURLを入力欄から取得
-  const relayInput = document.getElementById("relayInput");
-  const relayUrl = relayInput.value;
+  	//リレーURLを入力欄から取得
+  	const relayInput = document.getElementById("relayInput");
+  	const relayUrl = relayInput.value;
 
-  /* Q-1: nostr-toolsのRelayオブジェクトを初期化してみよう */
-  const relay = NostrTools.relayInit(relayUrl);
-  relay.on("error", () => {
+  	/* Q-1: nostr-toolsのRelayオブジェクトを初期化してみよう */
+  	const relay = NostrTools.relayInit(relayUrl);
+  	relay.on("error", () => {
     console.error("failed to connect");
-  });
+  	});
 
-  /* Q-2: Relayオブジェクトのメソッドを呼び出して、リレーに接続してみよう */
-  await relay.connect(relayUrl);
+  	/* Q-2: Relayオブジェクトのメソッドを呼び出して、リレーに接続してみよう */
+  	await relay.connect(relayUrl);
 
-  //あとで使う用に保存しておく
-  Relay_remember = relay; //「もっと見る」押した時にもさっきのリレー使えるように覚えておきましょうね
-  Npub_remember = npub; //npubもね
+  	//あとで使う用に保存しておく
+  	Relay_remember = relay; //「もっと見る」押した時にもさっきのリレー使えるように覚えておきましょうね
+  	Npub_remember = npub; //npubもね
 
-  /* Q-3: Relayオブジェクトのメソッドを使って、イベントを購読してみよう */
-  //kind0を購読
-  const sub0 = relay.sub([
-    {
-        "kinds":[0],
-        "authors":[npub]
-    }
+  	/* Q-3: Relayオブジェクトのメソッドを使って、イベントを購読してみよう */
+  	//kind0を購読
+  	const sub0 = relay.sub([
+    	{
+        	"kinds":[0],
+        	"authors":[npub]
+    	}
 
-  ]);
+  	]);
 
-  //kind1にフィルター（10イベント、illustタグつき、指定した公開鍵からの投稿）つけて購読
-  const sub = relay.sub([
-    {
-        "kinds": [1],
-        "limit": 10,
-        "#t":["illust"],
-        "authors": [npub]　// 作者の公開鍵
-    }
-  ]);
+  	//kind1にフィルター（10イベント、illustタグつき、指定した公開鍵からの投稿）つけて購読
+  	const sub = relay.sub([
+    	{
+        	"kinds": [1],
+        	"limit": 10,
+        	"#t":["illust"],
+        	"authors": [npub]　// 作者の公開鍵
+    	}
+  	]);
   
-  const profContainer = document.getElementById("profContainer");
-  profContainer.innerHTML = ""; // コンテナをクリア
+  	const profContainer = document.getElementById("profContainer");
+  	profContainer.innerHTML = ""; // コンテナをクリア
     
-  const illustContainer = document.getElementById("illustContainer");
-  illustContainer.innerHTML = ""; // コンテナをクリア
+  	const illustContainer = document.getElementById("illustContainer");
+  	illustContainer.innerHTML = ""; // コンテナをクリア
 
-  // メッセージタイプごとにリスナーを設定できる
+  	// メッセージタイプごとにリスナーを設定できる
   
-  //kind0の方
-  sub0.on("event", (pf) => {
-	display_kind0(pf);
-	//console.log(pf);
-  });
+  	//kind0の方
+  	sub0.on("event", (pf) => {
 
-  //kind0終わり
-  sub0.on("eose", () => {
-    console.log("****** EOSE ******");
-  });
+		display_kind0(pf); //kind0の処理は関数display_kind0さん、出番ですよ
+		//console.log(pf);
+  	});
 
-  //kind1の方
-　sub.on("event", (ev) => {
-	// 10個受信した中で一番古い投稿をCreatedAt_lastに記録する
-	if (!CreatedAt_last || ev.created_at < CreatedAt_last) { //初期のnullのままか、もっと小さい（古い）createdat値が出てきたら...
-    	CreatedAt_last = ev.created_at; //「今のところ1番古い」を更新
-	}
+  	//kind0終わり
+  	sub0.on("eose", () => {
+
+    	console.log("****** EOSE ******");
+  	});
+
+  	//kind1の方
+　	sub.on("event", (ev) => {
+		// 10個受信した中で一番古い投稿をCreatedAt_lastに記録する
+		if (!CreatedAt_last || ev.created_at < CreatedAt_last) { //初期のnullのままか、もっと小さい（古い）createdat値が出てきたら...
+    		CreatedAt_last = ev.created_at; //「今のところ1番古い」を更新
+		}
 	
-  	display_kind1(ev); //表示処理は関数display_kind1さん、出番ですよ
-  	//console.log(ev);
-  });
+  		display_kind1(ev); //kind1の処理は関数display_kind1さん、出番ですよ
+  		//console.log(ev);
+  	});
 
-  //kind1終わり
-  sub.on("eose", () => {
-    console.log("****** EOSE ******");
-	const mae = document.getElementById("loadMore");
-  	mae.style.display = "block"; //「もっと見る」ボタン解禁
-  });
+  	//kind1終わり
+  	sub.on("eose", () => {
+    	console.log("****** EOSE ******");
+		
+		const mae = document.getElementById("loadMore");
+  		mae.style.display = "block"; //「もっと見る」ボタン解禁
+  	});
 };
 
 //「前へ」を押されたときの処理
