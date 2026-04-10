@@ -9,151 +9,152 @@ let lastClickTime = 0;
 const CLICK_INTERVAL = 500; // ミリ秒（0.5秒）
 
 function display_kind0(pf) {
-　try {
-      const profcontent = JSON.parse(pf.content); // eventJSON文字列をオブジェクトに変換
-      const profpicture = profcontent.picture;//content内のpictureの値を取得
-      const profdisplayname = profcontent.display_name; // content内のdisplay_nameの値を取得
-      const profname = profcontent.name; // content内のnameの値を取得
-      const profabout = profcontent.about; // content内のaboutの値を取得
-      console.log(profname);
+	try {
+    	const profcontent = JSON.parse(pf.content); // eventJSON文字列をオブジェクトに変換
+      	const profpicture = profcontent.picture;//content内のpictureの値を取得
+      	const profdisplayname = profcontent.display_name; // content内のdisplay_nameの値を取得
+      	const profname = profcontent.name; // content内のnameの値を取得
+      	const profabout = profcontent.about; // content内のaboutの値を取得
+      	console.log(profname);
       
-      // プロフィールを表示するための要素を作成
-      const kind0Container = document.createElement("div");
+      	// プロフィールを表示するための要素を作成
+      	const kind0Container = document.createElement("div");
       
-      // プロフィールを表示するための部分にアイコンとdisplay_nameとnameと自己紹介を追加
-      //アイコン
-      const imageElement = document.createElement("img");
-      imageElement.src = profpicture;
-      imageElement.style.maxWidth = "100px"; // 最大幅制限
-      imageElement.style.height = "auto"; // 高さは自動調整
-      kind0Container.appendChild(imageElement);  // プロフィールを表示する要素に追加
-      //display_name　表示名
-      const displaynameElement = document.createElement("div");
-      displaynameElement.textContent = profdisplayname;
-      kind0Container.appendChild(displaynameElement); // プロフィールを表示する要素に追加
-      //name　アットマークの後
-      const nameElement = document.createElement("div");
-      nameElement.textContent = profname;
-      kind0Container.appendChild(nameElement); // プロフィールを表示する要素に追加
-      //自己紹介欄
-      const aboutElement = document.createElement("div");
-      aboutElement.textContent = profabout;
-      kind0Container.appendChild(aboutElement); // プロフィールを表示する要素に追加
+      	// プロフィールを表示するための部分にアイコンとdisplay_nameとnameと自己紹介を追加
+      	//アイコン
+      	const imageElement = document.createElement("img");
+      	imageElement.src = profpicture;
+      	imageElement.style.maxWidth = "100px"; // 最大幅制限
+      	imageElement.style.height = "auto"; // 高さは自動調整
+      	kind0Container.appendChild(imageElement);  // プロフィールを表示する要素に追加
+      	//display_name　表示名
+      	const displaynameElement = document.createElement("div");
+      	displaynameElement.textContent = profdisplayname;
+      	kind0Container.appendChild(displaynameElement); // プロフィールを表示する要素に追加
+      	//name　アットマークの後
+      	const nameElement = document.createElement("div");
+      	nameElement.textContent = profname;
+      	kind0Container.appendChild(nameElement); // プロフィールを表示する要素に追加
+      	//自己紹介欄
+      	const aboutElement = document.createElement("div");
+      	aboutElement.textContent = profabout;
+      	kind0Container.appendChild(aboutElement); // プロフィールを表示する要素に追加
 
-      // 全部まとめてプロフィールコンテナに追加
-      profContainer.appendChild(kind0Container);
+      	// 全部まとめてプロフィールコンテナに追加
+      	profContainer.appendChild(kind0Container);
     } catch (err) {
       console.error(err);
-  }
+  	}
 }
 
 function display_kind1(ev) {
 	try {
-      const content = ev.content; // contentタグの内容を取得
-      const Id = ev.id // idタグの内容（ここではnoteid）を取得
-	    console.log("Id:", Id);
-      const tags = ev.tags; // tags配列を取得
+      	const content = ev.content; // contentタグの内容を取得
+      	const Id = ev.id // idタグの内容（ここではnoteid）を取得
+	    //console.log("Id:", Id);
+      	const tags = ev.tags; // tags配列を取得
 
-      // contentタグ内に直リンクの画像URLがあるかチェック
-      const imgRegex = /https?:\/\/[^\s]+\.(?:png|jpe?g|gif|webp)/g;
-      const imgMatches = [...content.matchAll(imgRegex)];
-      console.log(imgMatches);
+      	// contentタグ内に直リンクの画像URLがあるかチェック
+      	const imgRegex = /https?:\/\/[^\s]+\.(?:png|jpe?g|gif|webp)/g;
+      	const imgMatches = [...content.matchAll(imgRegex)];
+      	//console.log(imgMatches);
         
-      // センシティブなコンテンツのチェック
-      const isSensitive = tags.some(tag => tag[0] === 'content-warning');
+      	// センシティブなコンテンツのチェック
+      	const isSensitive = tags.some(tag => tag[0] === 'content-warning');
 
-      const noteId = NostrTools.nip19.noteEncode(Id); //noteidをnote~形式に直す
-	    console.log("noteId:", noteId);
-      const nevent = NostrTools.nip19.neventEncode({id: Id}); //neventに直す
-	    console.log("nevent:", nevent);
+      	const noteId = NostrTools.nip19.noteEncode(Id); //noteidをnote~形式に直す
+	    //console.log("noteId:", noteId);
+      	const nevent = NostrTools.nip19.neventEncode({id: Id}); //neventに直す
+	    //console.log("nevent:", nevent);
 
-      // 投稿を表示するための要素を作成
-      const postContainer = document.createElement("div");
+      	// 投稿を表示するための要素を作成
+      	const postContainer = document.createElement("div");
 
 
       
-      switch (true) {
-          // センシティブなコンテンツの場合の処理
-        case isSensitive && imgMatches.length > 0:
-              let sensitiveContentClicked = false; // 初期値はクリックされていない状態
-              const sensitiveContent = document.createElement("div");
-              const sensitiveText = document.createElement("div");
-              sensitiveText.textContent = "[content-warning！閲覧するにはクリックしてください]";
-              sensitiveText.style.cursor = "pointer"; // カーソルをポインターに変更
-              sensitiveContent.appendChild(sensitiveText);
+      	switch (true) {
+          	// センシティブなコンテンツの場合の処理
+        	case isSensitive && imgMatches.length > 0:
+              	let sensitiveContentClicked = false; // 初期値はクリックされていない状態
+              	const sensitiveContent = document.createElement("div");
+              	const sensitiveText = document.createElement("div");
+              	sensitiveText.textContent = "[content-warning！閲覧するにはクリックしてください]";
+              	sensitiveText.style.cursor = "pointer"; // カーソルをポインターに変更
+              	sensitiveContent.appendChild(sensitiveText);
 
-              // 理由表示
-              const reasonTag = tags.find(tag => tag[0] === 'content-warning');
-              if (reasonTag && reasonTag[1]) {
-                  const reasonElement = document.createElement("div");
-                  reasonElement.textContent = `理由: ${reasonTag[1]}`;
-                  sensitiveContent.appendChild(reasonElement);
-              }
+              	// 理由表示
+              	const reasonTag = tags.find(tag => tag[0] === 'content-warning');
+              	if (reasonTag && reasonTag[1]) {
+                  	const reasonElement = document.createElement("div");
+                  	reasonElement.textContent = `理由: ${reasonTag[1]}`;
+                  	sensitiveContent.appendChild(reasonElement);
+              	}
               
               
-              // クリックイベントを設定
-              sensitiveContent.addEventListener("click", () => {
-                  if (!sensitiveContentClicked) { // クリックは一回まで！クリックしてない場合のみ処理が行われる
-                      sensitiveContentClicked = true; // クリック状態をtrueに設定
-                      // クリック時の処理：画像を表示する
-                      sensitiveContent.innerHTML = ''; // テキストをクリア
+              	// クリックイベントを設定
+              	sensitiveContent.addEventListener("click", () => {
+                  	if (!sensitiveContentClicked) { // クリックは一回まで！クリックしてない場合のみ処理が行われる
+                      	sensitiveContentClicked = true; // クリック状態をtrueに設定
+                      	// クリック時の処理：画像を表示する
+                      	sensitiveContent.innerHTML = ''; // テキストをクリア
                 
                       
-                      // 画像を表示するための要素を作成
-                      for (const match of imgMatches) {
-                          const SensitiveimageUrl = match[0];
+                      	// 画像を表示するための要素を作成
+                      	for (const match of imgMatches) {
+                          	const SensitiveimageUrl = match[0];
                          
-                          // 画像を表示するための要素を作成
-                          const Sensitiveimage = document.createElement("img");
-                          Sensitiveimage.src = SensitiveimageUrl;
-                          //画像の調整
-                          Sensitiveimage.style.maxWidth = "auto";
-                          Sensitiveimage.style.height = "300px";
-                          //画像をpostContainerに追加
-                          postContainer.appendChild(Sensitiveimage);
-                      }
+                          	// 画像を表示するための要素を作成
+                          	const Sensitiveimage = document.createElement("img");
+                          	Sensitiveimage.src = SensitiveimageUrl;
+                          	//画像の調整
+                          	Sensitiveimage.style.maxWidth = "auto";
+                          	Sensitiveimage.style.height = "300px";
+                          	//画像をpostContainerに追加
+                          	postContainer.appendChild(Sensitiveimage);
+                      	}
                       
-                      // テキストコンテンツを表示するための要素を作成
-                      const Sensitivetext = document.createElement("div");
-                      // 不要なURLを削除してテキストを設定
-                      Sensitivetext.textContent = content.replace(imgRegex, "");
-                      // テキスト部分を投稿表示のための要素 postContainer に追加
-                      sensitiveContent.appendChild(Sensitivetext);
+                      	// テキストコンテンツを表示するための要素を作成
+                      	const Sensitivetext = document.createElement("div");
+                      	// 不要なURLを削除してテキストを設定
+                      	Sensitivetext.textContent = content.replace(imgRegex, "");
+                      	// テキスト部分を投稿表示のための要素 postContainer に追加
+                      	sensitiveContent.appendChild(Sensitivetext);
                       
-                      // noteidの表示
-            //          const idElement = document.createElement("div");
-             //         idElement.textContent = noteId;　//表示する文字列をnoteidにする
-             //         postContainer.appendChild(idElement);
-			//nevent→nostterのリンク
-		      const neventElement = document.createElement("a"); //divじゃなくてaたぐ
-	　　　　	　　　　neventElement.href = `https://nostter.app/${nevent}`; // href属性にnostterのurl
-	　　　	　　　　neventElement.textContent = "投稿をみる(nostter)"; //リンク文字列
-	　　　	　　　　neventElement.target = "_blank"; // 新しいタブで開く
-	　　　	　　　　postContainer.appendChild(neventElement); 
-                  }
+                    	// noteidの表示
+            			//const idElement = document.createElement("div");
+             			//idElement.textContent = noteId;　//表示する文字列をnoteidにする
+             			//postContainer.appendChild(idElement);
+						
+						//nevent→nostterのリンク(noteidの代わり)	
+		      			const neventElement = document.createElement("a"); //divじゃなくてaたぐ
+	　　　　	　　			neventElement.href = `https://nostter.app/${nevent}`; // href属性にnostterのurl
+	　　　	　　			neventElement.textContent = "投稿をみる(nostter)"; //リンク文字列
+	　　　	　　			neventElement.target = "_blank"; // 新しいタブで開く
+	　　　	　　			postContainer.appendChild(neventElement); 
+                	}
 
-              });
-              // 投稿コンテナにセンシティブ投稿を追加
-              postContainer.appendChild(sensitiveContent);
+        		});
+              	// 投稿コンテナにセンシティブ投稿を追加
+              	postContainer.appendChild(sensitiveContent);
               
-              break;
+              	break;
               
-        // センシティブでないコンテンツで画像付きの場合
-        case !isSensitive && imgMatches.length > 0:
+        	// センシティブでないコンテンツで画像付きの場合
+        	case !isSensitive && imgMatches.length > 0:
 
-              // 画像を表示するための要素を作成
-              for (const match of imgMatches) {
-                const imageUrl = match[0];
+              	// 画像を表示するための要素を作成
+              	for (const match of imgMatches) {
+                	const imageUrl = match[0];
 
-                // 画像を表示するための要素を作成
-                const imageElement = document.createElement("img");
-                imageElement.src = imageUrl;
-                //画像の調整
-                imageElement.style.maxWidth = "auto";
-                imageElement.style.height = "300px";
-                //画像をpostContainerに追加
-                postContainer.appendChild(imageElement);
-              }
+                	// 画像を表示するための要素を作成
+                	const imageElement = document.createElement("img");
+                	imageElement.src = imageUrl;
+                	//画像の調整
+                	imageElement.style.maxWidth = "auto";
+                	imageElement.style.height = "300px";
+                	//画像をpostContainerに追加
+                	postContainer.appendChild(imageElement);
+              	}
 
         
               // テキストコンテンツを表示するための要素を作成
@@ -226,8 +227,8 @@ const searchPosts = async () => {
   await relay.connect(relayUrl);
 
   //あとで使う用に保存しておく
-  Relay_remember = relay; //「前へ」押した時にも使えるように覚えておきましょうね
-  Npub_remember = npub;
+  Relay_remember = relay; //「もっと見る」押した時にもさっきのリレー使えるように覚えておきましょうね
+  Npub_remember = npub; //npubもね
 
   /* Q-3: Relayオブジェクトのメソッドを使って、イベントを購読してみよう */
   //kind0を購読
@@ -262,6 +263,7 @@ const searchPosts = async () => {
 	display_kind0(pf);
 	//console.log(pf);
   });
+
   //kind0終わり
   sub0.on("eose", () => {
     console.log("****** EOSE ******");
@@ -271,64 +273,66 @@ const searchPosts = async () => {
 　sub.on("event", (ev) => {
 	// 10個受信した中で一番古い投稿をCreatedAt_lastに記録する
 	if (!CreatedAt_last || ev.created_at < CreatedAt_last) { //初期のnullのままか、もっと小さい（古い）createdat値が出てきたら...
-    CreatedAt_last = ev.created_at; //「今のところ1番古い」を更新しましょうね
+    	CreatedAt_last = ev.created_at; //「今のところ1番古い」を更新
 	}
 	
   	display_kind1(ev); //表示処理は関数display_kind1さん、出番ですよ
   	//console.log(ev);
   });
+
   //kind1終わり
   sub.on("eose", () => {
     console.log("****** EOSE ******");
 	const mae = document.getElementById("loadMore");
-  	mae.style.display = "block"; //「前へ」ボタン解禁
+  	mae.style.display = "block"; //「もっと見る」ボタン解禁
   });
 };
 
-//「前へ」を押されたとき
+//「前へ」を押されたときの処理
 const loadMorePosts = async () => { 
-　//無いと思うけど一応連打防止しておく
- console.log("前へを押しました");
-　const now = Date.now();
-　if (now - lastClickTime < CLICK_INTERVAL) return; 
-　lastClickTime = now;
+	//無いと思うけど一応連打防止しておく
 
-　if (isLoading) return; // 読み込み中(isLoading=true)ではスルーするスタンス
+	const now = Date.now();
+	if (now - lastClickTime < CLICK_INTERVAL) return; 
+	lastClickTime = now;
 
-　//リレーとかの情報なかったらスルーさせていただく
-  if (!Relay_remember || !Npub_remember || !CreatedAt_last) return; 
+	if (isLoading) return; // 読み込み中(isLoading=true)ではスルーするスタンス
 
-  isLoading = true; //ここから読み込み中判定
-  console.log("これから読み込みます");
-　// 「前へ」ボタンを読み込み中にして、一時的に押せなくする
-　const mae = document.getElementById("loadMore");
-  mae.disabled = true; 
-　mae.textContent = "読み込みちゅう...";
+	//リレーとかの情報なかったらスルーさせていただく
+	if (!Relay_remember || !Npub_remember || !CreatedAt_last) return; 
 
-  const sub = Relay_remember.sub([ //←1回目の読み込みで覚えたリレーを使いますよ
-    {
-      kinds: [1],
-      limit: 10,
-      "#t": ["illust"],
-      authors: [Npub_remember], //←1回目の読み込みで覚えたnpubを使いますよ
-      until: CreatedAt_last - 1 //前回の読み込みで一番古かったものよりも、1つ古いやつまで
-    }
-  ]);
+	isLoading = true; //ここから読み込み中判定
 
-  //前kind1表示
-  sub.on("event", (ev) => {
-    if (!CreatedAt_last || ev.created_at < CreatedAt_last) {
-    	CreatedAt_last = ev.created_at;
-    }
-  	display_kind1(ev); 
-  	//console.log(ev);
-  });
+	// 「もっと見る」ボタンを読み込み中にして、一時的に押せなくする
+	const mae = document.getElementById("loadMore");
+	mae.disabled = true; 
+	mae.textContent = "読み込みちゅう...";
 
-  //前kind1終わり
-  sub.on("eose", () => {
-	isLoading = false; //読み込み中解除
-    mae.disabled = false; // 再び押せるように
-	mae.textContent = "前へ"; //ボタンの表記を戻す
-  });
+	const sub = Relay_remember.sub([ //←1回目の読み込みで覚えたリレーを使いますよ
+    	{
+      		kinds: [1],
+      		limit: 10,
+      		"#t": ["illust"],
+      		authors: [Npub_remember], //←1回目の読み込みで覚えたnpubを使いますよ
+      		until: CreatedAt_last - 1 //前回の読み込みで一番古かったものよりも、1つ古いやつまで
+    	}
+	]);
+
+	//前kind1表示
+	sub.on("event", (ev) => {
+		if (!CreatedAt_last || ev.created_at < CreatedAt_last) {
+    		CreatedAt_last = ev.created_at;
+    	}
+		
+  		display_kind1(ev); 
+  		//console.log(ev);
+	});
+
+	//前kind1終わり
+	sub.on("eose", () => {
+		isLoading = false; //読み込み中解除
+    	mae.disabled = false; // 再び押せるように
+		mae.textContent = "もっと見る"; //ボタンの表記を戻す
+  	});
 	
 };
