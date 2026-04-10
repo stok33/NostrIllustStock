@@ -141,43 +141,7 @@ function display_kind1(ev) {
 						arrange_Images(postContainer, imgMatches);
       					arrange_Texts(sensitiveContent, content, imgRegex);
       					make_nostterLink(postContainer, nevent);
-
-						/*
-						// 画像を表示するための要素を作成
-						for (const match of imgMatches) {
-                          	const SensitiveimageUrl = match[0];
-                         
-                          	// 画像を表示するための要素を作成
-                          	const Sensitiveimage = document.createElement("img");
-                          	Sensitiveimage.src = SensitiveimageUrl;
-                          	//画像の調整
-                          	Sensitiveimage.style.maxWidth = "auto";
-                          	Sensitiveimage.style.height = "300px";
-                          	//画像をpostContainerに追加
-                          	postContainer.appendChild(Sensitiveimage);
-                      	}
-                      
-                      	// テキストコンテンツを表示するための要素を作成
-                      	const Sensitivetext = document.createElement("div");
-                      	// 不要なURLを削除してテキストを設定
-                      	Sensitivetext.textContent = content.replace(imgRegex, "");
-                      	// テキスト部分を投稿表示のための要素 postContainer に追加
-                      	sensitiveContent.appendChild(Sensitivetext);
-                      
-                    	// noteidの表示
-            			//const idElement = document.createElement("div");
-             			//idElement.textContent = noteId;　//表示する文字列をnoteidにする
-             			//postContainer.appendChild(idElement);
-						
-						//nevent→nostterのリンク(noteidの代わり)	
-		      			const neventElement = document.createElement("a"); //divじゃなくてaたぐ
-	　　　　	　　			neventElement.href = `https://nostter.app/${nevent}`; // href属性にnostterのurl
-	　　　	　　			neventElement.textContent = "投稿をみる(nostter)"; //リンク文字列
-	　　　	　　			neventElement.target = "_blank"; // 新しいタブで開く
-	　　　	　　			postContainer.appendChild(neventElement); 
-						*/
                 	}
-
         		});
               	// 投稿コンテナにセンシティブ投稿を追加
               	postContainer.appendChild(sensitiveContent);
@@ -191,43 +155,6 @@ function display_kind1(ev) {
 				arrange_Images(postContainer, imgMatches);
       			arrange_Texts(postContainer, content, imgRegex);
       			make_nostterLink(postContainer, nevent);
-				
-				/*
-				// 画像を表示するための要素を作成
-              	for (const match of imgMatches) {
-                	const imageUrl = match[0];
-
-                	// 画像を表示するための要素を作成
-                	const imageElement = document.createElement("img");
-                	imageElement.src = imageUrl;
-                	//画像の調整
-                	imageElement.style.maxWidth = "auto";
-                	imageElement.style.height = "300px";
-                	//画像をpostContainerに追加
-                	postContainer.appendChild(imageElement);
-              	}
-
-        
-              	// テキストコンテンツを表示するための要素を作成
-              	const textContainer = document.createElement("div");
-              	// 不要なURLを削除してテキストを設定
-              	textContainer.textContent = content.replace(imgRegex, "");
-              	//テキスト部分を投稿表示のための要素postContainerに追加
-              	postContainer.appendChild(textContainer);
-      
-              	//noteidの表示
-        		//const idElement = document.createElement("div");
-        		//idElement.textContent = noteId;
-         		//postContainer.appendChild(idElement);
-	　　　　		//nevent→nostterのリンク
-
-				//nostterurl
-              	const neventElement = document.createElement("a"); //divじゃなくてaタグ
-	　　　　		neventElement.href = `https://nostter.app/${nevent}`; // href属性にnostterのurl
-	　　　　		neventElement.textContent = "投稿をみる(nostter)"; //リンク文字列
-　　　	　　　　	neventElement.target = "_blank"; // 新しいタブで開く
-	　　　　		postContainer.appendChild(neventElement); 
-				*/
               
 	　　　　	break;
               
