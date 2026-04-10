@@ -300,7 +300,7 @@ const loadMorePosts = async () => {
   isLoading = true; //ここから読み込み中判定
 
 　// 「前へ」ボタンを読み込み中にして、一時的に押せなくする
-　const mae = document.getElementById("loadMoreBtn");
+　const mae = document.getElementById("loadMore");
   mae.disabled = true; 
 　mae.textContent = "読み込みちゅう...";
 
