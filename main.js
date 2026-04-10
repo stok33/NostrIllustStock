@@ -287,7 +287,7 @@ const searchPosts = async () => {
 
 //「前へ」を押されたとき
 const loadMorePosts = async () => { 
-　//表示爆速な人向けに一応連打防止しておく
+　//無いと思うけど一応連打防止しておく
  console.log("前へを押しました");
 　const now = Date.now();
 　if (now - lastClickTime < CLICK_INTERVAL) return; 
