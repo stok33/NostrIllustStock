@@ -79,6 +79,10 @@ function display_kind0(pf) {
 
       	// 全部まとめてプロフィールコンテナに追加
       	profContainer.appendChild(kind0Container);
+
+		//境界線(kind0欄と画像投稿一覧の境界)追加
+      	profContainer.appendChild(document.createElement("hr"));
+
     } catch (err) {
       console.error(err);
   	}
