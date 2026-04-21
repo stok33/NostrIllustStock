@@ -135,20 +135,20 @@ function display_kind1(ev) {
               
               
               	//クリックイベントを設定
-              	sensitiveContent.addEventListener("click", () => {
+              	sensitiveContainer.addEventListener("click", () => {
                   	if (!sensitiveContentClicked) { // クリックは一回まで！クリックしてない場合のみ処理が行われる
                       	sensitiveContentClicked = true; // クリック状態をtrueに設定
                       	// クリック時の処理：画像を表示する
-                      	sensitiveContent.innerHTML = ''; // テキストをクリア
+                      	sensitiveContainer.innerHTML = ''; // テキストをクリア
                 
                       	//表示関連は関数にお任せ
 						arrange_Images(postContainer, imgMatches);
-      					arrange_Texts(sensitiveContent, content, imgRegex);
+      					arrange_Texts(sensitiveContainer, content, imgRegex);
       					make_nostterLink(postContainer, nevent);
                 	}
         		});
               	// 投稿コンテナにセンシティブ投稿を追加
-              	postContainer.appendChild(sensitiveContent);
+              	postContainer.appendChild(sensitiveContainer);
               
               	break;
               
