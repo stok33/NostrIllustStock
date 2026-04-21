@@ -120,7 +120,7 @@ function display_kind1(ev) {
 				//content-warning表示
               	const sensitiveContainer = document.createElement("div");
               	const sensitiveText = document.createElement("div");
-              	sensitiveText.textContent = "[content-warning！\nクリックで表示]";
+              	sensitiveText.textContent = "【content-warning！ クリックで表示】";
 				sensitiveText.style.whiteSpace = "pre-line"; //改行の調整
               	sensitiveText.style.cursor = "pointer"; // カーソルをポインターに変更
               	sensitiveContainer.appendChild(sensitiveText);
